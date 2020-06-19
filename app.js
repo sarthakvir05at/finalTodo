@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todoFinal", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://sarthak15:sarthak15@initialdb-970k5.mongodb.net/todoFinal?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
 
 const itemsSchema= new mongoose.Schema({
   name: {
@@ -46,16 +46,22 @@ app.get("/", function(req, res) {
   
     Item.find({}, (err, doc) => {
 
-      if(doc.length === 0)
-      {
-        Item.insertMany(defaultArray, (err) => {  
-        if(err) 
-        console.log(err);
-      else
-    console.log("Success");  }) }
-  else
-   res.render("list", {listTitle: "Today", newListItems: doc}); })
-  })  
+      if(!err){
+        res.render("list", { listTitle: "Today", newListItems:doc });
+      }
+    })
+  });
+      //     if(doc.length === 0)
+  //     {
+  //       Item.insertMany(defaultArray, (err) => {  
+  //       if(err) 
+  //       console.log(err);
+  //     else
+  //     res.render("list", {listTitle: "Today", newListItems: doc});
+  //    })   }
+  // else
+  //  res.render("list", {listTitle: "Today", newListItems: doc}); })
+  // })  
 
 
 app.post("/", function(req, res){
@@ -150,6 +156,9 @@ app.get("/about", function(req, res){
   res.render("about");
 });
 
-app.listen(3000, function() {
+
+let port= process.env.PORT || 3000;
+
+app.listen(port, function() {
   console.log("Server started on port 3000");
 });
